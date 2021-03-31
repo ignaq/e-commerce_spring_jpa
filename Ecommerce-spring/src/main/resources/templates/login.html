@@ -1,0 +1,33 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>iniciar sesión</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+  </head>
+  <body>
+     
+     <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+     <div class="alert alert-success"  th:if="${success != null}"
+			th:text="${success}"></div>
+     <div class="container">
+      <form th:action="@{/login}" class="form-signin" method="post" >
+        <h2 class="text-center my-4">Iniciar Sesión</h2>
+        <p>
+          <label for="username" class="sr-only">Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+        </p>
+        <p>
+          <label for="password" class="sr-only">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+        </p>
+        <input name="_csrf" type="hidden" value="d9e59871-2a41-4e54-bf0d-c9da92c0cc49" />
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+      </form>
+</div>
+</body>
+</html>

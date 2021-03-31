@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+
+<head th:replace="layout/layout :: head"></head>
+
+
+
+
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container">
+
+		<div class="alert alert-danger my-4" role="alert">
+			<h4 class="alert-heading">Acceso Denegado!</h4>
+			<p>Lo sentimos <span th:text="${#httpServletRequest.remoteUser}"></span>! No tienes permisos de acceso</p>
+			<hr>
+			<a class="text-secondary mb-0" th:href="@{/}">&laquo; volver</a>
+		</div>
+
+
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="layout/layout :: head"></head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ 
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+
+
+
+	<div class="container main">
+
+		<div class="row">
+		 <div class="card">
+			<form th:action="@{/comprar}" method="post">
+				<table class="centered responsive-table highlight">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Item</th>
+							<th scope="col">Cantidad</th>
+							<th scope="col">Acción</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+					
+					<tbody id="items"></tbody>
+					
+					<tfoot>
+						<tr id="footer">
+							<th scope="row" colspan="5">El carrito está vacío</th>
+						</tr>
+					</tfoot>
+				</table>
+				
+				<button type="submit" class="btn btn-submit">Comprar</button>
+				
+			</form>
+			</div>
+			
+		</div>
+	</div>
+
+
+
+
+	<section th:replace="js/carrito :: table"></section>
+
+
+	<script th:replace="js/carrito :: carrito"></script>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>

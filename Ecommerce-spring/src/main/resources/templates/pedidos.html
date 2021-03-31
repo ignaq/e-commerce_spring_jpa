@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="layout/layout :: head">
+<meta charset="UTF-8" />
+  <style th:replace="css/compras :: style"></style>
+</head>
+
+
+<body>
+
+<header th:replace="layout/layout :: header"></header>
+
+	<div class="container main">
+		
+		
+		
+	<div class="card my-2">
+	
+	
+			<div class="card-title">
+				<p th:text="${titulo}" class="center-align  my-1"></p>
+			</div>
+			<div class="card-content">
+			
+			
+		
+				
+
+				<p class="card-text" th:text="'Nombre: ' + ${cliente.nombre}"></p>
+				<p class="card-text" th:text="'Apellido: ' + ${cliente.apellido}"></p>
+				<p class="card-text" th:text="'Email: ' + ${cliente.email}"></p>
+
+
+
+				<div class="card-action">
+				<div th:if="${#lists.isEmpty(cliente.pedidos)}" class="alert alert-info my-3" th:text="${cliente.nombre} + ' ' + ${cliente.apellido}
+				 + ' no tiene pedidos realizados'"></div>
+				</div>
+
+				<table th:if="${not #lists.isEmpty(cliente.pedidos)}" class="table">
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+						
+							<th scope="col">Fecha</th>
+							<th scope="col">Total</th>
+							<th  scope="col">Detalle</th>
+						
+							
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="pedido: ${cliente.pedidos}">
+
+							<td th:text="${pedido.id}"></td>
+							<td th:text="${pedido.fechaPedido}"></td>
+							<td th:text="${pedido.total}"></td>
+							<td ><a th:href="@{'/detalle/' + ${pedido.id}}" th:text="'Detalle'"></a> </td>
+						
+						</tr>
+
+					</tbody>
+				</table>
+
+</div>
+
+
+
+
+			</div>
+			</div>
+	
+	
+
+
+
+
+
+
+
+
+
+	<footer th:replace="layout/layout :: footer"></footer>
+	
+</body>
+</html>

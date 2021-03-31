@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="layout/layout :: head"></head>
+
+
+
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+
+	<div class="container">
+
+		
+			<div class="row  justify-content-center">
+
+
+			<div class="card m-4 col-6">
+
+				<div class="card-header">
+					<p class="card-title  text-center" th:text="${titulo}"></p>
+				</div>
+
+				<div class="card-body">
+
+
+					<form th:action="@{/crear_producto}" th:object="${producto}"
+					enctype="multipart/form-data" method="post">
+						<div class="mb-3">
+							<label for="nombreProducto" class="form-label"
+								th:text="'Nombre Producto'"></label> 
+								<input type="text" th:field="*{nombre}"
+								class="form-control" id="nombreProducto">
+						</div>
+						<div class="mb-3">
+							<label for="descripcionProducto" class="form-label">Descripción</label>
+							<textarea th:field="*{descripcion}" class="form-control" id="descripcionProducto" rows="3"></textarea>
+						</div>
+						<div class="mb-3">
+							<label for="precioProducto" class="form-label">Precio</label> <input
+								type="text" th:field="*{precio}" class="form-control" id="precioProducto"
+								aria-describedby="emailHelp">
+						</div>
+						<div class="mb-3">
+							<label for="fotoProducto" class="form-label">Foto</label> <input
+								type="text" th:field="*{foto}" class="form-control" id="fotoProducto"
+								aria-describedby="emailHelp">
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-4">
+								<button type="submit" class="btn btn-primary block">Crear
+									producto</button>
+							</div>
+						</div>
+					</form>
+
+
+				</div>
+
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+	<footer th:replace="layout/layout :: footer"></footer>
+
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head th:fragment="head">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+  <title th:text="${titulo}"></title>
+
+  <!-- CSS  -->
+  
+    <!-- Compiled and minified CSS -->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> 
+
+    <style th:replace="css/style :: style"></style>
+  
+</head>
+
+<body>
+
+  <header th:fragment="header">
+
+<!-- Dropdown Structure -->
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="#!">one</a></li>
+ 
+  <li class="divider"></li>
+  <li>
+    <form id="logoutForm" th:action="@{/logout}" method="post">
+      <button 
+       onclick="document.getElementById('logoutForm').submit;" type="submit">
+      Cerrar Sesión
+      </button>
+        
+      </form>
+  </li>
+</ul>
+
+
+
+  <nav class="grey darken-2" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">
+        <!--  <img src="images/springLogo.png" class="logo"/>-->
+      </a>
+      <ul class="hide-on-med-and-down">
+        <li><a class="nav-link" aria-current="page" sec:authorize="hasRole('ROLE_ADMIN')"
+            th:href="@{'/crear_producto'}">Crear</a></li>
+        <li>
+          <a class="nav-link" th:href="@{'/'}">Productos</a>
+        </li>
+       
+        <li>
+          <a class="nav-link" th:href="@{'/pedidos'}">Mis compras</a>
+        </li>
+      </ul>
+      <ul class="right navega">
+        <li>
+          <a class="carrito" th:href="@{'/carrito'}">
+            <i class="material-icons">local_grocery_store</i>
+             
+             <span class="badge red badge-total">0</span>  
+          </a>
+        
+        </li>
+        
+      <!-- Dropdown Trigger -->
+      <li><a sec:authorize="isAuthenticated()" class="dropdown-trigger" href="#!" data-target="dropdown1"> <span sec:authentication="name"></span><i class="material-icons right">arrow_drop_down</i></a></li>
+      <!-- Dropdown Trigger -->
+
+
+
+
+       <li class="btn-left" sec:authorize="!isAuthenticated()"><a th:href="@{/crear}">Crear
+            usuario</a></li>
+        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Iniciar
+            Sesión</a></li>
+        
+<!--  
+
+            <li  sec:authorize="isAuthenticated()" class="dropdown"><a
+							class="btn dropdown-toggle" href="#"
+							role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+							aria-expanded="false"> <span sec:authentication="name"></span>
+								</a></li>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+								<form id="logoutForm" th:action="@{/logout}" method="post">
+								<button class="dropdown-item"
+								 onclick="document.getElementById('logoutForm').submit;" type="submit">
+								Cerrar Sesión
+								</button>
+									
+								</form>
+							</div>
+						
+						-->
+
+       
+
+      </ul>
+   
+
+
+
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="#">Menu</a></li>
+         <li><a class="nav-link" aria-current="page" sec:authorize="hasRole('ROLE_ADMIN')"
+            th:href="@{'/crear_producto'}">Crear</a></li>
+        <li>
+          <a class="nav-link" th:href="@{'/'}">Productos</a>
+        </li>
+       
+        <li>
+          <a class="nav-link" th:href="@{'/pedidos'}">Mis compras</a>
+        </li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+</header>
+
+
+
+
+ 
+ <footer th:fragment="footer" class="page-footer">
+ 
+ 
+   <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Footer Content</h5>
+              
+              </div>
+              <div class="col l4 offset-l2 s12">
+                 <p 
+              sec:authorize="isAuthenticated()">
+              ¡Bienvenido <span sec:authentication="name"></span>! | <span
+                sec:authentication="principal.authorities"></span>
+            </p>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2021 @ignaq
+            <a class="grey-text text-lighten-4 right" href="https://github.com/ignaq" target="_BLANK">github
+           </a>
+         
+            </div>
+          </div>
+ 
+ 
+ 
+   <!--  Scripts-->
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      
+ <script th:fragment="script">
+
+ (function($){
+	  $(function(){
+
+	    $('.sidenav').sidenav();
+
+	  }); // end of document ready
+	})(jQuery); // end of jQuery name space
+
+ $(".dropdown-trigger").dropdown();
+ 
+ </script>
+ <script th:fragment="carrito"></script>
+  
+  
+  </footer>
+
+
+
+
+
+
+
+ 
+</body>
+
+</html>

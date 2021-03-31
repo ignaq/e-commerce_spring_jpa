@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="layout/layout :: head"></head>
+<meta charset="utf-8">
+
+
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+
+
+	<div class="container main">
+		<table class="centered responsive-table highlight">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Item</th>
+					<th scope="col">Cantidad</th>
+					<th scope="col">Acción</th>
+					<th scope="col">Total</th>
+				</tr>
+			</thead>
+
+			<tbody id="items"></tbody>
+			<tfoot>
+				<tr id="footer">
+					<th scope="row" colspan="5">El carrito está vacío</th>
+				</tr>
+			</tfoot>
+		</table>
+
+		<div class="row" id="cards"></div>
+
+
+
+
+		<template id="template-card">
+
+
+		<div class="col s12 m6 l4 xl4">
+			<div class="card hoverable">
+				<div class="card-image">
+					<img
+						src="https://http2.mlstatic.com/D_NQ_NP_817015-MLA41765520080_052020-O.webp">
+
+				</div>
+				<div class="card-content">
+					<h5 class="card-title">Smart TV Hitachi LE504KSMART20 LED 4K
+						50</h5>
+					<span>20.0000</span>
+					<button class="btn btnComprar" data-id="">Añadir al
+						carrito</button>
+				</div>
+
+
+			</div>
+		</div>
+		</template>
+
+
+
+
+		<template id="template-footer">
+		<th scope="row" colspan="2">Total Productos</th>
+		<td class="cantidad-items">8</td>
+		<td>
+			<button class="btn btn-danger btn-sm" id="vaciar">vaciar
+				todo</button>
+		</td>
+		<td>$ <span>2000</span></td>
+		</template>
+
+
+
+		<template id="template-shopping">
+		<tr>
+			<th scope="row"><input type="hidden" name="item_id">id</th>
+			<td class="item-nombre">producto</td>
+			<td class="item-cant">1</td>
+			<td>
+				<button class="btn btn-info btn-sm btn-sumar">+</button>
+				<button class="btn btn-danger btn-sm btn-restar">-</button>
+			</td>
+			<td>$ <span>1000</span></td>
+		</tr>
+		</template>
+	</div>
+
+
+
+
+
+
+
+
+
+	<footer th:replace="layout/layout :: footer"></footer>
+
+	<script th:replace="layout/layout :: script"></script>
+
+
+	<script type="text/javascript" th:inline="javascript">
+
+
+const cards = document.getElementById('cards');
+const templateCards = document.getElementById('template-card').content
+const fragment = document.createDocumentFragment();
+const templateFooter = document.getElementById('template-footer').content
+const templateShopping = document.getElementById('template-shopping').content
+const items = document.getElementById('items')
+const itemFooter = document.getElementById('footer')
+const totalDeItems = document.querySelector('.badge-total')
+let ShoppingCart = {}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchData();
+    if(localStorage.getItem('shoppingCart')){
+        ShoppingCart = JSON.parse(localStorage.getItem('shoppingCart'))
+        printShoppingCart()
+    
+    }
+
+})
+
+cards.addEventListener('click', e => {
+    addToCart(e)
+})
+
+items.addEventListener('click', e => {
+    btnAccion(e)
+})
+const fetchData = async () => {
+    try {
+        const res = await fetch('http://localhost:8080/productos');
+        const data = await res.json();
+       
+        //mostrar data 
+        printCards(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const printCards  = data => {
+    data.forEach(product => {
+       // console.log(product);
+        templateCards.querySelector('h5').textContent = product.nombre;
+        templateCards.querySelector('span').textContent = product.precio;
+        templateCards.querySelector('img').setAttribute("src", product.foto);
+        templateCards.querySelector('.btnComprar').dataset.id = product.id;
+
+        const clone = templateCards.cloneNode(true)
+        fragment.appendChild(clone)
+    })
+    cards.appendChild(fragment)
+}
+
+const addToCart = (e) => {
+
+    if(e.target.classList.contains('btnComprar')){
+        setShoppingCart(e.target.parentElement)
+    }
+e.stopPropagation()
+}
+
+const setShoppingCart = obj => {
+    console.log(obj)
+    const product = {
+        id: obj.querySelector('.btnComprar').dataset.id,
+        title: obj.querySelector('h5').textContent,
+        precio: obj.querySelector('span').textContent,
+        cantidad: 1
+    }
+   
+
+    if(ShoppingCart.hasOwnProperty(product.id)){
+        product.cantidad = ShoppingCart[product.id].cantidad +1
+       
+    }
+    ShoppingCart[product.id] = {...product}
+    printShoppingCart()
+   
+}
+
+const printShoppingCart = () => {
+    
+
+    items.innerHTML = '';
+    Object.values(ShoppingCart).forEach(prod => {
+        templateShopping.querySelector('th').textContent = prod.id
+        templateShopping.querySelectorAll('input[name="item_id"]').textContent = prod.id
+       templateShopping.querySelectorAll('input[name="item_id"]').textContent = prod.id
+        templateShopping.querySelector('.item-nombre').textContent = prod.title
+        templateShopping.querySelector('.item-cant').textContent = prod.cantidad
+        templateShopping.querySelectorAll('input[name="item_cant"]').textContent = prod.cantidad
+        templateShopping.querySelector('.btn-sumar').dataset.id = prod.id
+        templateShopping.querySelector('.btn-restar').dataset.id = prod.id
+        templateShopping.querySelector('span').textContent = prod.cantidad * prod.precio
+        const clone = templateShopping.cloneNode(true)
+        fragment.appendChild(clone)
+    })
+    
+    items.appendChild(fragment)
+    
+    printFooter()
+  
+    localStorage.setItem('shoppingCart', JSON.stringify(ShoppingCart))
+   
+ 
+    
+}
+
+const printFooter = () => {
+  itemFooter.innerHTML = ''
+    if(Object.keys(ShoppingCart).length === 0 ){
+        
+        itemFooter.innerHTML = `<th scope="row" colspan="5">El carrito está vacío</th>`
+        return
+    }
+
+    const cantidadTotal = Object.values(ShoppingCart).reduce((acc, {cantidad}) =>acc + cantidad ,0)
+    const precioTotal = Object.values(ShoppingCart).reduce((acc, {cantidad, precio}) => acc + cantidad * precio ,0)
+   
+    templateFooter.querySelector('.cantidad-items').textContent = cantidadTotal
+    
+    //guardar cantidad para el badge 
+    localStorage.setItem('total', JSON.stringify(cantidadTotal))
+    totalDeItems.innerHTML = cantidadTotal;
+    /**********************************/ 
+
+    templateFooter.querySelector('span').textContent = precioTotal
+
+    const clone = templateFooter.cloneNode(true)
+    fragment.appendChild(clone)
+    itemFooter.appendChild(fragment)
+
+    const btnVaciar = document.getElementById('vaciar')
+    btnVaciar.addEventListener('click', () => {
+        ShoppingCart = {}
+        totalDeItems.innerHTML= `0`;
+        localStorage.setItem('total', JSON.stringify(0))
+        printShoppingCart()
+       
+
+    })
+}
+const btnAccion = e => {
+    //aumentar itemes
+   
+   if (e.target.classList.contains('btn-sumar')){
+       // console.log(ShoppingCart[e.target.dataset.id])
+    
+    const product = ShoppingCart[e.target.dataset.id]
+    //product.cantidad = ShoppingCart[e.target.dataset.id].cantidad + 1
+    product.cantidad++
+
+
+    ShoppingCart[e.target.dataset.id] = {...product}
+    printShoppingCart()
+   
+}
+    if (e.target.classList.contains('btn-restar')){
+        const product = ShoppingCart[e.target.dataset.id]
+        product.cantidad--
+        if(product.cantidad === 0){
+            delete ShoppingCart[e.target.dataset.id]
+            totalDeItems.innerHTML= `0`;
+            localStorage.setItem('total', JSON.stringify(0))
+        }
+        printShoppingCart()
+        
+    }
+    e.stopPropagation()
+}
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

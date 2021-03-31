@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="layout/layout :: head">
+<meta charset="UTF-8" />
+</head>
+
+
+<body>
+
+
+	<header th:replace="layout/layout :: header"></header>
+
+<div class="card my-2" >
+			
+			
+			<div class="row justify-content-center">
+				<div class="card-content col-5">
+					
+					<ul class="list-group my-2">
+						<li class="list-group-item" th:text="'Datos del pedido'"></li>
+						<li class="list-group-item"
+							th:text="'Númeración pedido: ' + ${pedido.id}"></li>
+					
+						<li class="list-group-item"
+							th:text="'fecha de pedido: ' + ${pedido.fechaPedido}"></li>
+
+					</ul>
+					
+				<table class="table"> 
+					<thead>
+						<tr>
+							<th>Producto</th>
+							<th>Precio</th>
+							<th>Cantidad</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each ="Item: ${pedido.items}">
+							<td th:text="${Item.producto.nombre}"></td>
+							<td th:text="${Item.producto.precio}"></td>
+							<td th:text="${Item.cantidad}"></td>
+							<td th:text="${Item.calcularImporte()}"></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="card-footer">
+					<h5 class="float-right">Total: <span th:text="${pedido.total}" class="badge bg-primary" ></span></h5>
+				
+				
+				</div>
+				</div>
+			</div>
+		</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+	
+</body>
+</html>
